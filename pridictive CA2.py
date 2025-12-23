@@ -40,6 +40,66 @@ sns.heatmap(df[['Passenger Count','Year','Month']].corr(), annot=True)
 plt.show()
 
 
+#EDA: Passenger Count by GEO Region
+plt.figure(figsize=(12, 6))
+
+region_passengers = (
+    df.groupby('GEO Region')['Passenger Count']
+    .sum()
+    .sort_values(ascending=False)
+    .reset_index()
+)
+
+sns.barplot(
+    data=region_passengers,
+    x='Passenger Count',
+    y='GEO Region',
+    hue='GEO Region',
+    palette='viridis',
+    legend=False
+)
+
+plt.title('Total Passenger Count by GEO Region')
+plt.tight_layout()
+plt.savefig('passenger_by_region.png')
+plt.show()
+
+
+#EDA: Price Category Distribution
+plt.figure(figsize=(8, 6))
+
+df.groupby('Price Category Code')['Passenger Count'].sum().plot(
+    kind='pie',
+    autopct='%1.1f%%',
+    startangle=140
+)
+
+plt.title('Passenger Count by Price Category')
+plt.ylabel('')
+plt.axis('equal')     # makes pie circular
+plt.tight_layout()
+plt.savefig('price_category_pie.png')
+plt.show()
+
+
+#EDA: Terminal and Activity Type
+plt.figure(figsize=(12, 6))
+
+sns.boxplot(
+    data=df,
+    x='Terminal',
+    y='Passenger Count'
+)
+
+plt.yscale('log')  # Log scale for high variance
+plt.title('Passenger Count Distribution per Terminal (Log Scale)')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('terminal_boxplot.png')
+plt.show()
+
+
+
 
 #SUPERVISED LEARNING (REGRESSION)
 #6 FEATURE & TARGET SELECTION
